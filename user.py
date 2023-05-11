@@ -5,7 +5,7 @@ import getpass
 from bcolors import bcolors
 from crypto import *
 import csv
-
+from cli import *
 
 def password_strength(password):
     # calculating the length
@@ -87,7 +87,7 @@ def login():
 
     while not logged_in:
         username = input("Enter username: ").lower().strip()
-        MasterPass = getpass.getpass("Enter strong Master Password: ")
+        MasterPass = getpass.getpass("Enter your Master Password: ")
 
         hashed_username = hashlib.sha256(username.encode()).hexdigest()
         hashed_password = hashlib.sha256(MasterPass.encode()).hexdigest()
@@ -142,9 +142,74 @@ def delete_account():
 
             print(bcolors.BOLD + bcolors.OKBLUE + "\nAccount deleted successfully!" + bcolors.ENDC)
 
-            break
+            exit()
 
         elif confirmation == 'n':
+            input_command(key=key, password=password)
+
+
+        else:
+            print(bcolors.FAIL+"Wrong Input"+bcolors.ENDC)
+
+def change_pass(password):
+
+    while True:
+        confirmation = input(bcolors.WARNING + bcolors.BOLD + "Are you sure you want to change your Master Password? (y/n): " + bcolors.ENDC).lower().strip()
+        print(confirmation)
+        if confirmation == 'y':
+            while True:
+
+                MasterPassword = getpass.getpass("Enter strong Master Password: ")
+
+                if password_strength(MasterPassword)['password_ok']:
+                    print(bcolors.OKGREEN + bcolors.BOLD + "Strong Password!" + bcolors.ENDC)
+
+                    confirm_pass = getpass.getpass("Confirm Master Password: ")
+
+                    if MasterPassword == confirm_pass:
+                        break
+                    else:
+                        print(bcolors.FAIL + "passwords didn't match!" + bcolors.ENDC)
+
+                if password_strength(MasterPassword)['length_error'] == True or password_strength(MasterPassword)[
+                    'digit_error'] == True or password_strength(MasterPassword)['uppercase_error'] or \
+                        password_strength(MasterPassword)['lowercase_error'] or password_strength(MasterPassword)[
+                    'symbol_error']:
+
+                    print(bcolors.WARNING + """
+            A password is considered strong if:
+                8 characters length or more
+                1 digit or more
+                1 symbol or more
+                1 uppercase letter or more
+                1 lowercase letter or more
+                                    """ + bcolors.ENDC)
+
+            if MasterPassword == password:
+                print("The new password is same as your current!")
+                change_pass(password)
+                break
+            hashed_password = hashlib.sha256(MasterPassword.encode()).hexdigest()
+
+            with open("credentials.json", "r") as credj:
+                username = json.load(credj)
+
+            cred_update = {
+                "username": username['username'],
+                "password": hashed_password
+            }
+
+            with open("credentials.json", "w") as credsj:
+                json.dump(cred_update, credsj, indent=4)
+
+            new_key = create_key(MasterPassword)
+            encrypt_file(new_key)
+            print(bcolors.OKGREEN+"Password has been changed!"+bcolors.ENDC)
+            print(bcolors.BOLD+"\nPlease restart the program and login again."+bcolors.ENDC)
+
+            exit()
+
+        if confirmation == 'n':
             break
 
         else:

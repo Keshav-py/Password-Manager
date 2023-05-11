@@ -114,7 +114,7 @@ def delete_row():
             for i, lists in enumerate(length):
                 if i == 0:
                     continue
-                length[i][0] = str(int(lists[0]) - 1)
+                length[i][0] = str(int(lists[0]) )
 
             del length[row_no]
             readcsv.close()
@@ -142,7 +142,8 @@ def command_menu():
     commands.add_row([bcolors.OKCYAN+'2'+bcolors.ENDC, bcolors.green+'VIEW PASSWORDS'+bcolors.ENDC])
     commands.add_row([bcolors.OKCYAN+'3'+bcolors.ENDC, bcolors.blue+'MAKE ENTRY'+bcolors.ENDC])
     commands.add_row([bcolors.OKCYAN+'4'+bcolors.ENDC, 'EDIT ENTRY'])
-    commands.add_row([bcolors.OKCYAN+'5'+bcolors.ENDC, bcolors.red+'DELETE ENTRY'+bcolors.ENDC])
-    commands.add_row([bcolors.OKCYAN+'6'+bcolors.ENDC, bcolors.red+bcolors.BOLD+'DELETE ACCOUNT'+bcolors.ENDC])
+    commands.add_row([bcolors.OKCYAN+'5'+bcolors.ENDC, bcolors.WARNING+'CHANGE MASTER PASSWORD'+bcolors.ENDC])
+    commands.add_row([bcolors.OKCYAN+'6'+bcolors.ENDC, bcolors.red+'DELETE ENTRY'+bcolors.ENDC])
+    commands.add_row([bcolors.OKCYAN+'7'+bcolors.ENDC, bcolors.red+bcolors.BOLD+'DELETE ACCOUNT'+bcolors.ENDC])
 
     print(commands)
