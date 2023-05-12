@@ -108,13 +108,13 @@ def delete_row():
             while True:
                 display_table()
                 row_no = int(input("Which row do you want to delete?: "))
-                if 1 <= row_no <= len(length):
+                if 1 <= row_no <= len(length)-1:
                     break
 
             for i, lists in enumerate(length):
                 if i == 0:
                     continue
-                length[i][0] = str(int(lists[0]) )
+                length[i][0] = str(int(lists[0])-1)
 
             del length[row_no]
             readcsv.close()
@@ -135,6 +135,7 @@ def delete_row():
 
 
 def command_menu():
+
     commands = PrettyTable([bcolors.WARNING+bcolors.BOLD+"INPUT"+bcolors.ENDC, bcolors.WARNING+bcolors.BOLD+"COMMAND"+bcolors.ENDC])
 
     # Add rows
